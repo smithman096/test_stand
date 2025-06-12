@@ -48,8 +48,8 @@
 <div style="display: flex; justify-content: center; align-items: center; margin-top: 30px; gap: 40px;">
   <p style="font-size: 26px; line-height: 2; margin: 0;">
     <span style="font-size: 32px;">จำนวนเก้าอี้: <strong>500</strong></span><br>
-    <span style="font-size: 32px;">⚫ จำนวนเก้าอี้ : <strong>97</strong></span><br>
-    <span style="font-size: 32px;">⚪ จำนวนเก้าอี้ : <strong>403</strong></span>
+    <span style="font-size: 32px;">⚫ จำนวนเก้าอี้ : <strong id="countActive">0</strong></span><br>
+    <span style="font-size: 32px;">⚪ จำนวนเก้าอี้ : <strong id="countInactive">500</strong></span>
   </p>
   <img src="qrcode.png" alt="QR Code" width="180">
 </div>
@@ -60,17 +60,19 @@
 
   let jaodumSeats = new Set([
     "C9", "C10", "C11", "C12", "C13", "C14", "C15", "C16", "D15", "D16",
-    "D6", "E5", "E6", "F5", "F6", "G3", "G4", "G5", "H3", "H4", "H5", "I5",
-    "J4", "J5", "K3", "K4", "L3", "L10", "L11", "L12", "L13", "L14", "L15", "L16",
-    "M9", "M14", "N9", "N12", "N13", "O9", "O12", "O13", "P9", "Q10", "Q11", "Q12",
-    "Q13", "Q14", "Q15", "Q16", "P4", "P5", "P6", "Q4", "Q6", "R4", "R5", "R6",
-    "S9", "S10", "S11", "T9", "U9", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16",
-    "E9", "E10", "F8", "F9", "F11", "F12", "G8", "G9", "G11", "H8", "H9", "H10", "H11",
-    "H12", "H13", "H14", "H15", "H16", "I9", "I10", "I11", "I12", "I13", "I14", "I15", "I16"
+    "E9", "E10", "F4", "F9", "F13", "G4", "G6", "G7", "G9", "G13",
+    "H4", "H5", "H7", "H9", "H14", "I7", "I9", "I10", "I11", "I12", "I13", "I14", "I15", "I16",
+    "J6", "J7", "K5", "K6", "L4", "L5", "L9", "L10", "L11", "L12", "L13", "L14", "L15", "L16",
+    "M4", "M9", "M15", "N9", "N12", "N14", "O9", "O12", "O13",
+    "P4", "P5", "P6", "P7", "P9", "Q4", "Q7", "Q9", "Q10", "Q11", "Q12", "Q13", "Q14", "Q15", "Q16",
+    "R4", "R7", "S4", "S7", "S9", "S10", "S11", "T4", "T5", "T6", "T7", "T9", "U9",
+    "V9", "W9", "W10", "W11", "W12", "W13", "W14", "W15", "W16"
   ]);
 
   const table = document.getElementById("seatTable");
   const seatList = document.getElementById("seatList");
+  const countActive = document.getElementById("countActive");
+  const countInactive = document.getElementById("countInactive");
 
   function updateSeatListDisplay() {
     const sorted = Array.from(jaodumSeats).sort((a, b) => {
@@ -79,6 +81,8 @@
       return colA === colB ? rowA - rowB : colA - colB;
     });
     seatList.innerText = sorted.length ? sorted.join(", ") : "ไม่มี";
+    countActive.innerText = sorted.length;
+    countInactive.innerText = 500 - sorted.length;
   }
 
   // Header
@@ -119,3 +123,4 @@
 
 </body>
 </html>
+
