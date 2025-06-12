@@ -31,19 +31,16 @@
       background: #ddd;
       padding: 4px;
     }
-    #selectedSeats {
-      margin-top: 20px;
-      font-size: 18px;
-      white-space: pre-line;
-      text-align: left;
+    #jsSetOutput {
       width: 90%;
       max-width: 1000px;
-      margin-left: auto;
-      margin-right: auto;
-      background: #fff;
-      padding: 10px 20px;
-      border: 1px dashed #888;
-      border-radius: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 10px;
+      border: 1px solid #888;
+      border-radius: 6px;
+      white-space: pre;
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -60,8 +57,9 @@
 
 <table id="seatTable"></table>
 
-<div id="selectedSeats"><strong>เก้าอี้ที่เลือกไว้:</strong>
-  <div id="seatList">ไม่มี</div>
+<div style="text-align: left; margin: 20px auto; max-width: 1000px;">
+  <h3>📦 โค้ด JavaScript ที่เลือก:</h3>
+  <textarea id="jsSetOutput" rows="10" readonly></textarea>
 </div>
 
 <div style="display: flex; justify-content: center; align-items: center; margin-top: 30px; gap: 40px;">
@@ -70,7 +68,6 @@
     <span style="font-size: 32px;">⚫ จำนวนเก้าอี้ : <strong id="countActive">0</strong></span><br>
     <span style="font-size: 32px;">⚪ จำนวนเก้าอี้ : <strong id="countInactive">500</strong></span>
   </p>
-  <img src="qrcode.png" alt="QR Code" width="180">
 </div>
 
 <script>
@@ -89,9 +86,9 @@
   ]);
 
   const table = document.getElementById("seatTable");
-  const seatList = document.getElementById("seatList");
   const countActive = document.getElementById("countActive");
   const countInactive = document.getElementById("countInactive");
+  const jsSetOutput = document.getElementById("jsSetOutput");
 
   function updateSeatListDisplay() {
     const sorted = Array.from(jaodumSeats).sort((a, b) => {
@@ -101,27 +98,27 @@
     });
 
     if (sorted.length === 0) {
-      seatList.innerText = "ไม่มี";
+      jsSetOutput.value = "";
     } else {
       const lines = [];
       for (let i = 0; i < sorted.length; i += 13) {
         const chunk = sorted.slice(i, i + 13).map(seat => `"${seat}"`).join(", ");
         lines.push(chunk);
       }
-      seatList.innerText = lines.join("\n");
+      jsSetOutput.value = `let jaodumSeats = new Set([\n  ${lines.join(",\n  ")}\n]);`;
     }
 
     countActive.innerText = sorted.length;
     countInactive.innerText = 500 - sorted.length;
   }
 
-  // Header
+  // สร้าง Header
   let header = "<tr><th></th>";
   for (const col of rowLabels) header += `<th>${col}</th>`;
   header += "</tr>";
   table.innerHTML += header;
 
-  // Rows
+  // สร้างเก้าอี้
   for (let r = 1; r <= rowCount; r++) {
     let tr = `<tr><th>${r}</th>`;
     for (let c = 0; c < rowLabels.length; c++) {
@@ -133,6 +130,7 @@
     table.innerHTML += tr;
   }
 
+  // Event คลิกเลือก/ยกเลิก
   table.addEventListener("click", function (e) {
     if (e.target.tagName === "TD") {
       const seatId = e.target.dataset.seat;
@@ -153,4 +151,3 @@
 
 </body>
 </html>
-
