@@ -34,6 +34,16 @@
     #selectedSeats {
       margin-top: 20px;
       font-size: 18px;
+      white-space: pre-line;
+      text-align: left;
+      width: 90%;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #fff;
+      padding: 10px 20px;
+      border: 1px dashed #888;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -47,9 +57,12 @@
 <div style="margin: 20px auto; width: 800px; height: 200px; background-color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 60px; font-weight: bold; border: 2px solid #000;">
   เวทีลิเก
 </div>
+
 <table id="seatTable"></table>
 
-<div id="selectedSeats"><strong>เก้าอี้ที่เลือกไว้:</strong> <span id="seatList">ไม่มี</span></div>
+<div id="selectedSeats"><strong>เก้าอี้ที่เลือกไว้:</strong>
+  <div id="seatList">ไม่มี</div>
+</div>
 
 <div style="display: flex; justify-content: center; align-items: center; margin-top: 30px; gap: 40px;">
   <p style="font-size: 26px; line-height: 2; margin: 0;">
@@ -86,7 +99,18 @@
       const [colB, rowB] = [b.charCodeAt(0), parseInt(b.slice(1))];
       return colA === colB ? rowA - rowB : colA - colB;
     });
-    seatList.innerText = sorted.length ? sorted.join(", ") : "ไม่มี";
+
+    if (sorted.length === 0) {
+      seatList.innerText = "ไม่มี";
+    } else {
+      const lines = [];
+      for (let i = 0; i < sorted.length; i += 13) {
+        const chunk = sorted.slice(i, i + 13).map(seat => `"${seat}"`).join(", ");
+        lines.push(chunk);
+      }
+      seatList.innerText = lines.join("\n");
+    }
+
     countActive.innerText = sorted.length;
     countInactive.innerText = 500 - sorted.length;
   }
